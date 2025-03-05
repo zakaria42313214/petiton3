@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bienvenue chez ABC 🚀</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/particles.js/2.0.0/particles.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Poppins", sans-serif;
+        }
+        body {
+            background: #0f0f0f;
+            overflow: hidden;
+            color: white;
+            text-align: center;
+        }
+        #particles-js {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: #0f0f0f;
+        }
+        /* Conteneur principal */
+        .wrapper {
+            position: relative;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 100vh;
+            padding: 50px;
+        }
+        /* Titre */
+        .title {
+            position: absolute;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 32px;
+            font-weight: bold;
+            text-transform: uppercase;
+            background: linear-gradient(135deg, #ff416c, #ff4b2b);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        /* Textes de bienvenue */
+        .text {
+            width: 25%;
+            font-size: 20px;
+            opacity: 0;
+            transform: translateY(30px);
+            animation: fadeInUp 1s ease-in-out forwards 0.5s;
+        }
+        .left-text {
+            text-align: left;
+        }
+        .right-text {
+            text-align: right;
+        }
+        /* Boîte principale */
+        .container {
+            width: 400px;
+            padding: 30px;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(15px);
+            border-radius: 15px;
+            box-shadow: 0px 0px 20px rgba(255, 255, 255, 0.2);
+            animation: fadeInUp 1s ease-in-out;
+        }
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(50px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        h2 {
+            font-size: 24px;
+            margin-bottom: 15px;
+        }
+        input {
+            width: 100%;
+            padding: 12px;
+            margin-top: 10px;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            outline: none;
+            transition: 0.3s;
+        }
+        input::placeholder {
+            color: rgba(255, 255, 255, 0.6);
+        }
+        input:focus {
+            background: rgba(255, 255, 255, 0.3);
+            transform: scale(1.02);
+        }
+        button {
+            width: 100%;
+            padding: 12px;
+            margin-top: 15px;
+            border: none;
+            border-radius: 5px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            background: linear-gradient(135deg, #ff416c, #ff4b2b);
+            color: white;
+            transition: 0.3s;
+            box-shadow: 0px 4px 10px rgba(255, 65, 108, 0.3);
+        }
+        button:hover {
+            background: linear-gradient(135deg, #ff4b2b, #ff416c);
+            box-shadow: 0px 6px 15px rgba(255, 65, 108, 0.5);
+            transform: scale(1.05);
+        }
+        button:disabled {
+            background: gray;
+            cursor: not-allowed;
+        }
+        #status {
+            margin-top: 15px;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+
+<div id="particles-js"></div>
+
+<h1 class="title">Bienvenue chez ABC</h1>
+
+<div class="wrapper">
+    <div class="text left-text">Bonjour</div>
+
+    <div class="container">
+        <h2>Envoyer un Message 🔥</h2>
+        <input type="text" id="message1" placeholder="Message Partie 1">
+        <input type="text" id="message2" placeholder="Message Partie 2">
+        <input type="text" id="message3" placeholder="Message Partie 3">
+        <button id="sendButton" disabled>Envoyer 🚀</button>
+        <p id="status"></p>
+    </div>
+
+    <div class="text right-text">Bienvenue sur le site ABC</div>
+</div>
+
+<script>
+    particlesJS("particles-js", {
+        particles: {
+            number: { value: 80, density: { enable: true, value_area: 800 } },
+            color: { value: "#ffffff" },
+            shape: { type: "circle" },
+            opacity: { value: 0.5, random: true },
+            size: { value: 3, random: true },
+            move: { enable: true, speed: 2 }
+        },
+        interactivity: {
+            events: { onhover: { enable: true, mode: "repulse" } }
+        }
+    });
+
+    const message1 = document.getElementById("message1");
+    const message2 = document.getElementById("message2");
+    const message3 = document.getElementById("message3");
+    const sendButton = document.getElementById("sendButton");
+    const statusText = document.getElementById("status");
+
+    function validateFields() {
+        sendButton.disabled = !(message1.value.trim() && message2.value.trim() && message3.value.trim());
+    }
+
+    message1.addEventListener("input", validateFields);
+    message2.addEventListener("input", validateFields);
+    message3.addEventListener("input", validateFields);
+
+    sendButton.addEventListener("click", async () => {
+        sendButton.textContent = "Envoi en cours...";
+        sendButton.disabled = true;
+
+        const response = await fetch('/send', {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ 
+                message1: message1.value, 
+                message2: message2.value,
+                message3: message3.value 
+            })
+        });
+
+        const result = await response.json();
+        statusText.textContent = result.success || result.error;
+
+        if (response.ok) {
+            statusText.className = "success";
+            message1.value = "";
+            message2.value = "";
+            message3.value = "";
+            sendButton.disabled = true;
+        } else {
+            statusText.className = "error";
+        }
+
+        sendButton.textContent = "Envoyer 🚀";
+    });
+</script>
+
+</body>
+</html>
